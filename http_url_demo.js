@@ -1,5 +1,10 @@
 let http=require("http");
 let url=require("url");
+let userinfo=[
+      {"username":"admin","password":"123"},
+      {"username":"vimal","password":"345"},
+      {"username":"viren","password":"123"}
+]
 let homepage=`
             <html>
             <head>
@@ -17,10 +22,40 @@ let homepage=`
 
 
 `;
+let loginpage=`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page </title>
+</head>
+<body>
+<form action="checklogin">
+    <table>
+        <tr>
+            <td> User Name :</td>
+            <td><input type="text" name="username"></td>
+        </tr>
+        <tr>
+            <td>Password :</td>
+            <td><input type="password" name="password"></td>
+            
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit">
+                <input type="reset">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
+`
 let server=http.createServer((request,response)=>{
       //console.log(request.url);
-      let urlinfo=url.parse(request.url);
-
+      let urlinfo=url.parse(request.url,true);
+      //console.log(urlinfo);
       if(urlinfo.path != '/favicon.ico')
       {
             if(urlinfo.path=='/Aboutus'){
@@ -30,7 +65,28 @@ let server=http.createServer((request,response)=>{
                   response.write("<h1>Contactus Page</h1>");
             }
             else if(urlinfo.path=='/login'){
-                  response.write("<h1>Login Page </h1>");
+                  response.write(loginpage);
+            }
+            else if(urlinfo.pathname =='/checklogin')
+            {
+                let result=userinfo.find(user=>user.username==urlinfo.query.username && user.password==urlinfo.query.password);
+                console.log(result);
+                if(result != undefined)
+                {
+                      response.write("<h1>login successfully</h1>");
+                }
+                else
+                {
+                      response.write("<h1>wrong username or password</h1>");
+                }
+                /*if(urlinfo.query.username=="admin" && urlinfo.query.password=="123")
+                {
+                      response.write("<h1>login successfully</h1>");
+                }
+                else
+                {
+                      response.write("<h1>wrong username or password</h1>");
+                }*/
             }
             else{
                   response.write(homepage);

@@ -5,6 +5,7 @@ let userinfo=[
       {"username":"vimal","password":"345"},
       {"username":"viren","password":"123"}
 ]
+
 let homepage=`
             <html>
             <head>
@@ -58,7 +59,28 @@ let server=http.createServer((request,response)=>{
       //console.log(urlinfo);
       if(urlinfo.path != '/favicon.ico')
       {
-            if(urlinfo.path=='/Aboutus'){
+            if(urlinfo.pathname=='/calc')
+            {
+                let a=parseInt(urlinfo.query.a);
+                let b=parseInt(urlinfo.query.b);
+
+                if(urlinfo.query.func.toLowerCase()=="sub")
+                {
+
+                    response.write("Subtraction is :"+(a-b));
+                }
+                else if(urlinfo.query.func=="add")
+                {
+                        response.write("Addition  is :"+(a+b));
+                }
+                console.log(urlinfo.query.func);
+                console.log(urlinfo.query.a);
+                console.log(urlinfo.query.b);
+
+
+            }
+
+            else if(urlinfo.path=='/Aboutus'){
                   response.write("<h1>Aboutus Page</h1>");
             }
             else if(urlinfo.path=='/Contactus'){
@@ -79,14 +101,14 @@ let server=http.createServer((request,response)=>{
                 {
                       response.write("<h1>wrong username or password</h1>");
                 }
-                /*if(urlinfo.query.username=="admin" && urlinfo.query.password=="123")
+                if(urlinfo.query.username=="admin" && urlinfo.query.password=="123")
                 {
                       response.write("<h1>login successfully</h1>");
                 }
                 else
                 {
                       response.write("<h1>wrong username or password</h1>");
-                }*/
+                }
             }
             else{
                   response.write(homepage);
@@ -95,6 +117,7 @@ let server=http.createServer((request,response)=>{
            //response.write("hi from server");
 
       }
+
       response.end();
 })
 
